@@ -1,8 +1,58 @@
+GIT
+  remote: git://github.com/guard/guard-minitest.git
+  revision: 97257cfc8fae3e4ce2ed1a8a1191c1fc943aa606
+  branch: master
+  specs:
+    guard-minitest (1.0.0.beta1)
+      guard (>= 1.8)
+      minitest (>= 2.1)
+
+GIT
+  remote: git@github.com:customink/messaging_helper.git
+  revision: 3344bcc433a3d9cac8b681a4f5a7335e82222625
+  specs:
+    messaging_helper (1.0.3)
+      activesupport (>= 2.3)
+      amqp (>= 0.8.2)
+      bunny (>= 0.7.3)
+      daemons (~> 1.1.2)
+      hamster (~> 0.4.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (3.2.13)
+      i18n (= 0.6.1)
+      multi_json (~> 1.0)
+    amq-client (1.0.2)
+      amq-protocol (>= 1.2.0)
+      eventmachine
+    amq-protocol (1.6.0)
+    amqp (1.0.2)
+      amq-client (~> 1.0.2)
+      amq-protocol (>= 1.3.0)
+      eventmachine
+    bunny (0.8.0)
     coderay (1.0.9)
+    columnize (0.3.6)
+    daemons (1.1.9)
+    debugger (1.6.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.1)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.2)
+    deferrable_gratification (0.3.1)
+      eventmachine
+    dotenv (0.7.0)
+    em-imap (0.4.1)
+      deferrable_gratification
+      eventmachine
+    eventmachine (1.0.3)
     ffi (1.8.1)
+    foreman (0.63.0)
+      dotenv (>= 0.7)
+      thor (>= 0.13.6)
     formatador (0.2.4)
     guard (1.8.0)
       formatador (>= 0.2.4)
@@ -10,14 +60,16 @@ GEM
       lumberjack (>= 1.0.2)
       pry (>= 0.9.10)
       thor (>= 0.14.6)
-    guard-minitest (0.5.0)
-      guard (>= 0.4)
+    hamster (0.4.3)
+    i18n (0.6.1)
     listen (1.1.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     lumberjack (1.0.3)
     method_source (0.8.1)
+    minitest (5.0.3)
+    multi_json (1.7.6)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -35,6 +87,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  debugger
+  em-imap
+  eventmachine
+  foreman
   guard
-  guard-minitest
+  guard-minitest!
+  messaging_helper!
+  minitest
   terminal-notifier-guard

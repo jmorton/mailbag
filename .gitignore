@@ -1,0 +1,4 @@
+.ruby-version
+.env
+config/*.yml
+*.log
