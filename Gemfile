@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gem 'eventmachine'
 gem 'em-imap'
 gem 'foreman'
+gem 'mail'
 
 group :development do
   gem 'minitest'

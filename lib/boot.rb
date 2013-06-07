@@ -1,4 +1,5 @@
 require 'mailbag'
+require 'mail'
 
 # To send all output to the terminal when
 # launched using foreman (as intended).
@@ -13,5 +14,6 @@ config = {  'host'      =>  ENV['MAILBAG_HOST'],
 puts "starting Mailbag"
 
 Mailbag.run(config) do |message|
-  puts message
+  m = Mail.read_from_string message
+  puts "handling mail from #{m.from}: #{m.subject}"
 end
