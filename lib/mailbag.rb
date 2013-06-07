@@ -61,11 +61,18 @@ module Mailbag
     end.bind! do
       puts "waiting for new email"
       client.wait_for_new_emails do |response|
-        client.fetch(response.data, 'RFC822').callback do |messages|
-          puts('fetching messages while waiting')
-          messages.each do |message|
-            yield message.attr['RFC822']
+        puts "handling a response: #{response.inspect}"
+        begin
+          if response.data > 0
+            client.fetch(response.data, 'RFC822').callback do |messages|
+              puts('fetching messages while waiting')
+              messages.each do |message|
+                yield message.attr['RFC822']
+              end
+            end
           end
+        rescue Exception => e
+          puts e.backtrace
         end
       end
     end.errback do |error|
