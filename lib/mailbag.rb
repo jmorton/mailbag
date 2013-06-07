@@ -72,11 +72,11 @@ module Mailbag
             end
           end
         rescue Exception => e
-          puts e.backtrace
+          warn e.backtrace
         end
       end
     end.errback do |error|
-      puts error.backtrace
+      warn error.backtrace
     end
 
     @client = client
