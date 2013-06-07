@@ -63,6 +63,9 @@ module Mailbag
       client.wait_for_new_emails do |response|
         puts "handling a response: #{response.inspect}"
         begin
+          # em-imap triggers new email when a message is
+          # removed from mailbox.  if you fetch the 0th
+          # message, then things stop working.
           if response.data > 0
             client.fetch(response.data, 'RFC822').callback do |messages|
               puts('fetching messages while waiting')
