@@ -50,9 +50,9 @@ module Mailbag
     @logger.debug "preparing #{config.inspect}"
 
     #          ...oh look, it's...
-    # ~'~`*-~'~-~ THE ~-'"~ RUG ~'~-``~-~-' #
+    # ~'~`*-~'~-~ THE ~='"~ RUG ~'~-``~=-~-'
     #     ...under which I sweep this...
-    #
+    #                  -'O.o'-
 
     client = EM::IMAP.new config['host'], config['port'], true
 
