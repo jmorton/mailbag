@@ -43,22 +43,25 @@ module Mailbag
   # @private
   #
   def self.prepare config, &block
-    puts "connecting to #{config['host']} for #{config['username']} to watch #{config['folder']}"
+    puts "connecting to #{config['host']} for #{config['username']}"
 
     #          ...oh look, it's...
     # ~'~`*-~'~-~ THE ~='"~ RUG ~'~-``~=-~-'
     #     ...under which I sweep this...
     #                  -'O.o'-
 
-    @client = EM::IMAP.new config['host'], config['port'], true
+    client = EM::IMAP.new config['host'], config['port'].to_i, true
 
-    @client.connect.bind! do
-      @client.login config['username'], config['password']
+    client.connect.bind! do
+      puts "logging in"
+      client.login config['username'], config['password']
     end.bind! do
-      @client.examine config['folder']
+      puts "changing folder"
+      client.examine 'INBOX'
     end.bind! do
-      @client.wait_for_new_emails do |response|
-        @client.fetch(response.data, 'RFC822').callback do |messages|
+      puts "waiting for new email"
+      client.wait_for_new_emails do |response|
+        client.fetch(response.data, 'RFC822').callback do |messages|
           puts('fetching messages while waiting')
           messages.each do |message|
             yield message.attr['RFC822']
@@ -66,10 +69,10 @@ module Mailbag
         end
       end
     end.errback do |error|
-      $stderr.puts error
+      puts error.backtrace
     end
 
-    @client
+    @client = client
   end
 
   def self.cleanup

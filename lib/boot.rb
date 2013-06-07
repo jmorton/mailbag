@@ -5,13 +5,12 @@ require 'mailbag'
 $stdout.sync = true
 $stderr.sync = true
 
-config = {  'host'     =>  ENV['MAILBAG_HOST'],
-            'port'     =>  ENV['MAILBAG_PORT'],
-            'username' =>  ENV['MAILBAG_USER'],
-            'password' =>  ENV['MAILBAG_PASS'],
-            'folder'   =>  ENV['MAILBAG_FOLD'] }
+config = {  'host'      =>  ENV['MAILBAG_HOST'],
+            'port'      =>  ENV['MAILBAG_PORT'],
+            'username'  =>  ENV['MAILBAG_USER'],
+            'password'  =>  ENV['MAILBAG_PASS']}
 
-$stderr.puts "an example error"
+puts "starting Mailbag"
 
 Mailbag.run(config) do |message|
   puts message
