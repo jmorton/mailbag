@@ -14,12 +14,8 @@ require 'yaml'
 module Mailbag
 
 
-  @logger = Logger.new 'mailbag.log'
-  @config = YAML.load_file('config/mailbag.yml')
-
-
-  Signal.trap('INT')  { cleanup }
-  Signal.trap('TERM') { EM.stop }
+  Signal.trap('INT')  { cleanup; stop }
+  Signal.trap('TERM') { stop }
 
 
   #
@@ -28,10 +24,10 @@ module Mailbag
   #
   # This is a blocking method.
   #
-  def self.run(&block)
+  def self.run(config, &block)
     EM.run do
-      @clients = @config['mailbags'].map { |name, settings| prepare(settings, &block) }
-      @logger.debug 'the swamp lies dormant'
+      prepare(config, &block)
+      puts 'starting Event Machine'
     end
   end
 
@@ -47,44 +43,42 @@ module Mailbag
   # @private
   #
   def self.prepare config, &block
-    @logger.debug "preparing #{config.inspect}"
+    puts "connecting to #{config['host']} for #{config['username']} to watch #{config['folder']}"
 
     #          ...oh look, it's...
     # ~'~`*-~'~-~ THE ~='"~ RUG ~'~-``~=-~-'
     #     ...under which I sweep this...
     #                  -'O.o'-
 
-    client = EM::IMAP.new config['host'], config['port'], true
+    @client = EM::IMAP.new config['host'], config['port'], true
 
-    client.connect.bind! do
-      client.login config['username'], config['password']
+    @client.connect.bind! do
+      @client.login config['username'], config['password']
     end.bind! do
-      client.examine config['folder']
+      @client.examine config['folder']
     end.bind! do
-      client.wait_for_new_emails do |response|
-        client.fetch(response.data, 'RFC822').callback do |messages|
-          @logger.info('fetching messages while waiting')
+      @client.wait_for_new_emails do |response|
+        @client.fetch(response.data, 'RFC822').callback do |messages|
+          puts('fetching messages while waiting')
           messages.each do |message|
             yield message.attr['RFC822']
           end
         end
       end
     end.errback do |error|
-      @logger.error(error)
+      $stderr.puts error
     end
 
-    client
-  end
-
-  def self.logger
-    @logger
+    @client
   end
 
   def self.cleanup
-    @logger.info "disconnecting clients"
-    @clients.map do |client|
-      client.disconnect
-    end
+    puts "disconnecting client"
+    @client.disconnect
+  end
+
+  def self.stop
+    puts "stopping Event Machine"
     EM.stop
   end
 

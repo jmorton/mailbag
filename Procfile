@@ -1,1 +1,1 @@
-worker: bundle exec ruby -Ilib lib/boot.rb
+mailbag: bundle exec ruby -Ilib lib/boot.rb
