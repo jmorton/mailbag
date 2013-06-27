@@ -74,7 +74,7 @@ module Mailbag
               end
             end
           end
-        rescue Exception => e
+        rescue => e
           warn e.backtrace
         end
       end
